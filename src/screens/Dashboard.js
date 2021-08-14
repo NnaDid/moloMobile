@@ -1,21 +1,21 @@
 import React ,{ useState } from 'react'
-import { StyleSheet} from 'react-native'
-import { ApplicationProvider, Button, Icon, IconRegistry, Layout, Text, Input ,Spinner} from '@ui-kitten/components'; 
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
-import * as eva from '@eva-design/eva';
+import { StyleSheet,StatusBar} from 'react-native';
 import { ICONS, COLORS, Logo} from '../constants';
+import { NavigationContainer } from '@react-navigation/native';
+import Tabs from './Tabs';
 
 
 const Dashboard = () => {
     return (
-        <>
-            <IconRegistry icons={EvaIconsPack} />
-            <ApplicationProvider {...eva} theme={eva.light}>
-                <Layout style ={styles.container}>
-                        <Text>Welcome to the Dashboard</Text>
-                </Layout>
-            </ApplicationProvider>
-      </>
+           <NavigationContainer independent={true}>
+                     <StatusBar
+                        animated={true}
+                        backgroundColor={COLORS.primary}
+                        networkActivityIndicatorVisible={true}
+                        StatusBarStyle="light-content"
+                      />
+               <Tabs />
+          </NavigationContainer>
     )
 }
 

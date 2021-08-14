@@ -14,56 +14,64 @@ import { StyleSheet, Text, View, Image } from 'react-native'
  }
 
  export const ICONS ={
-        logo:   <Image source ={require('../assets/logo.png')} style={{resizeMode: 'contain',aspectRatio:3/4, marginVertical:0}}/>, 
-        splash: <Image source ={require('../assets/logo.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-        moloBg: <Image source ={require('../assets/icons/molobg.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
+        logo:    require('../assets/logo.png') , 
+        splash:  require('../assets/splash.png') ,
+        moloBg:  require('../assets/icons/molobg.png'),
+        settings:  require('../assets/icons/tabicons/settings.png'),
 
-        money:  <Image source ={require('../assets/icons/money.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-        rightArrow:  <Image source ={require('../assets/icons/right_arrow.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-        leftArrow:  <Image source ={require('../assets/icons/left_arrow.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
+        money:  require('../assets/icons/money.png') ,
+        rightArrow:  require('../assets/icons/right_arrow.png'),
+        leftArrow:   require('../assets/icons/left_arrow.png'),
 
 
-        wallet:  <Image source ={require('../assets/icons/wallet.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-        user:    <Image source ={require('../assets/icons/user.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-        user:    <Image source ={require('../assets/icons/user.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
+        wallet:require('../assets/icons/wallet.png'),
+        user:  require('../assets/icons/user.png'),
+        user:  require('../assets/icons/user.png'),
         
         partnership:{
-            innerCirty:    <Image source ={require('../assets/icons/innercity.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-            children:      <Image source ={require('../assets/icons/children.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-            healingSchool: <Image source ={require('../assets/icons/healingsch.jpg')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-            loveworldPlus: <Image source ={require('../assets/icons/loveworld-plus.jpg')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-            loveworldSat:  <Image source ={require('../assets/icons/lvworldsat.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-            itm:           <Image source ={require('../assets/icons/itm.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-            ror:           <Image source ={require('../assets/icons/ror.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
-            imam:          <Image source ={require('../assets/icons/imm1.png')} style={{resizeMode: 'contain',aspectRatio:3/4}}/>,
+            innerCirty:    require('../assets/icons/innercity.png'),
+            children:      require('../assets/icons/children.png'),
+            healingSchool: require('../assets/icons/healingsch.jpg'),
+            loveworldPlus: require('../assets/icons/loveworld-plus.jpg'),
+            loveworldSat:  require('../assets/icons/lvworldsat.png'),
+            itm:           require('../assets/icons/itm.png'),
+            ror:           require('../assets/icons/ror.png'),
+            imam:          require('../assets/icons/imm1.png'),
         }
 
  }
 
 
  export const Logo = ()=>(
-    ICONS.logo
+      <Image  source={ICONS.logo} style={{height:150,width:150, resizeMode: 'contain', marginVertical:10, aspectRatio:3/4}} />
 );
+
+const BASE_URL1 ="http://192.168.43.13:80/works/moloNet/api"; 
+const BASE_URL  ="http://hack.vestcoin.org/api"; 
 
  export const APIS ={
      AUTH:{
-         SIGNUP:"",
-         LOGIN:"",
+         SIGNUP:            BASE_URL+"/v1/Auth/Register.php",
+         LOGIN:             BASE_URL+"/v1/Auth/Login.php",
          RECOVER_PASSSWORD:"",
          CHANGE_PASSWORD:"",
          UPDATE_PROFILE:"",
      },
      WALLET:{
-         FUND:"",
-         TRASNFER:"",
-         DONATION:"",
+         FUND:        BASE_URL+"/api/v1/Wallet/",
+         TRASNFER:    BASE_URL+"/api/v1/Wallet/",
+         BAL:         BASE_URL+"/api/v1/Wallet/",
+         DONATION:    BASE_URL+"/api/v1/Wallet/",
      },
      UTILITY:{
          LIGHT:"",
          TV:"",
      },
      VTU:{
-         AIRTIME_TOPUP:"",
-         DATA_TOPUP:"",
-     }
+         AIRTIME_DATA_TOPUP:    BASE_URL+"/api/v1/Topup",
+         DATAPLANS:             BASE_URL+"/api/v1/Dataplans/",
+     },
+
+     BIBLE_READING_PLAN:"",
+     
  }

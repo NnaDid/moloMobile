@@ -1,10 +1,11 @@
 import React ,{ useState } from 'react'
-import { StyleSheet, ScrollView,KeyboardAvoidingView,ImageBackground} from 'react-native'
+import { StyleSheet, ScrollView,KeyboardAvoidingView,ImageBackground,ToastAndroid} from 'react-native'
 import { ApplicationProvider, Button, Icon, IconRegistry, Layout, Text, Input ,Spinner} from '@ui-kitten/components'; 
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
 import { ICONS, COLORS, Logo} from '../constants';
-
+import Loader from './Loader';
+import { APIS } from '../constants';
 
 
 
@@ -34,11 +35,11 @@ const toggleSecureEntry = () => { setSecureTextEntry(!secureTextEntry);};
 const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name={secureTextEntry ? 'eye-off' : 'eye'}/>);
 
 
-  const [fName, setfName]       = useState('');
-  const [email, setEmail]       = useState('');
-  const [userBVN, setUserBVN]   = useState('');
+  const [fName, setfName]               = useState('');
+  const [email, setEmail]               = useState('');
   const [phoneNumber, setPhoneNumber]   = useState('');
   const [userPassword, setUserPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading]           = useState(false);
   const [errortext, setErrortext]       = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
@@ -64,16 +65,24 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
       alert('Please fill Password');
       return;
     }
+    if (!confirmPassword) {
+      alert('Please Confirm Your Password');
+      return;
+    }
+    if (userPassword!==confirmPassword) {
+      setErrortext('Psssword Mismatch');
+      return;
+    }
     //Show Loader
     setLoading(true);
     var dataToSend = {
-            fullName: fName,
+            name: fName,
             email: email,
             phone: phoneNumber,
             paswd: userPassword,
       };
-      // console.log(dataToSend); 
-    fetch('http://192.168.43.13:80/works/beyond/api/signUp/', {
+
+    fetch(APIS.AUTH.SIGNUP, {
       method: 'POST',
       body: JSON.stringify(dataToSend),
       headers: {
@@ -89,6 +98,10 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
         // If server response message same as Data Matched
         if (responseJson.message === 'success') {
           setIsRegistraionSuccess(true);
+          ToastAndroid.showWithGravityAndOffset(
+            'Registration Successful', ToastAndroid.LONG, ToastAndroid.BOTTOM,
+            25, 500 
+            );
           props.navigation.replace('Login');
           console.log('Registration Successful. Please Login to proceed');
         } else {
@@ -107,16 +120,15 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
     <>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.light}>
-    {/* <Loader loading={loading} /> */}
+    <Loader loading={loading} />
      <ScrollView keyboardShouldPersistTaps="handled">
-        <ImageBackground 
-              source={{uri:'../assets/splash.png'}} 
-              resizeMode="cover" 
-              style ={styles.imageBackground}
-          >
+     <ImageBackground
+                style={styles.imgBackground } 
+                resizeMode='cover' 
+                source={ICONS.splash}>
 
         <KeyboardAvoidingView enabled>
-            <Layout style={{ justifyContent: 'center', alignItems: 'center'}}>
+            <Layout style={{ justifyContent: 'center', alignItems: 'center', backgroundColor:'transparent'}}>
                 <Layout style={{justifyContent: 'center', alignItems: 'center'}}>
                     <Logo />
                 </Layout>
@@ -141,7 +153,7 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
                   size  ='large'
                   keyboardType="email-address"
                   accessoryRight ={EmailIcon}
-                  placeholder='Your Email' 
+                  placeholder='christian@gmail.com' 
                   onChangeText={nextValue => setEmail(nextValue)}
                   style ={{ width:'90%'}}
               />
@@ -154,20 +166,32 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
                   size  ='large'
                   keyboardType="phone-pad"
                   accessoryRight ={PhoneIcon}
-                  placeholder='Your Phone Number' 
+                  placeholder='Your phone number eg. 08098766545' 
                   onChangeText={nextValue => setPhoneNumber(nextValue)}
                   style ={{ width:'90%'}}
               />
             </Layout>
-            <Layout style={styles.inputBackground}>
+            <Layout style={{...styles.inputBackground}}>
                 <Input
                   value ={userPassword}
                   label ='Choose Password'
                   size  ='large'
                   accessoryRight={renderIcon}
-                  placeholder='Choose Password' 
+                  placeholder='**********' 
                   secureTextEntry={secureTextEntry}
                   onChangeText={nextValue => setUserPassword(nextValue)}
+                  style ={{ width:'90%'}}
+              />
+            </Layout>
+            <Layout style={{...styles.inputBackground}}>
+                <Input
+                  value ={confirmPassword}
+                  label ='Confirm Password'
+                  size  ='large'
+                  accessoryRight={renderIcon}
+                  placeholder='Confirm Pasword' 
+                  secureTextEntry={secureTextEntry}
+                  onChangeText={nextValue => setConfirmPassword(nextValue)}
                   style ={{ width:'90%'}}
               />
             </Layout>
@@ -175,7 +199,7 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
                 </Layout>
 
 
-             {errortext !== '' ? (<Text style={styles.errorTextStyle}>{errortext}</Text> ) : null}
+             {errortext !== '' ? (<Text style={{color:'red',fontWeight:'bold'}}>{errortext}</Text> ) : null}
             <Button style ={styles.btnBg,{ width:'87%',margin:20, backgroundColor:COLORS.primary, borderColor:COLORS.primary}} 
                     onPress ={handleSubmitButton}> Create Account</Button>   
                
@@ -255,4 +279,10 @@ const styles = StyleSheet.create({
       borderRadius:4,
       marginLeft:10,
     },
+    imgBackground: {
+     width: '100%',
+     height: '100%',
+     flex: 1 ,
+     marginBottom:30,
+ },
 })

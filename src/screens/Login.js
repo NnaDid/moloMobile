@@ -1,9 +1,13 @@
 import React from 'react';
-import { StyleSheet, ToastAndroid, KeyboardAvoidingView, ScrollView} from 'react-native';
-import {  ApplicationProvider, Button, Icon, IconRegistry, Layout, Text, Input, View} from '@ui-kitten/components'; 
+import { StyleSheet, ToastAndroid, ScrollView,ImageBackground} from 'react-native';
+import { ApplicationProvider, Button, Icon, IconRegistry, Layout, Text, Input, View} from '@ui-kitten/components'; 
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
-import { ICONS, COLORS, Logo} from '../constants';
+import { ICONS, COLORS, Logo, APIS} from '../constants';
+import Loader from './Loader';
+import AsyncStorage from '@react-native-community/async-storage'; 
+
+
 
 const EmailIcon = (props) => (
   <Icon {...props} name='email-outline'/>
@@ -45,7 +49,7 @@ const LoginScreen = ({navigation}) => {
     }
     setLoading(true);
     let dataToSend = {email: email, paswd: password};
-    fetch('http://192.168.43.13:80/works/beyond/api/login/', {
+    fetch(APIS.AUTH.LOGIN, {
       method: 'POST',
       body: JSON.stringify(dataToSend),
       headers: {
@@ -63,12 +67,13 @@ const LoginScreen = ({navigation}) => {
             const userData ={
                     name:responseJson.data.name,
                     email:responseJson.data.email,
-                    bvn:responseJson.data.bvn,
-                    phone:responseJson.data.phone
+                    phone:responseJson.data.phone,
+                    user_id:responseJson.data.user_id
             };
-          AsyncStorage.setItem('BEYOND_USER',JSON.stringify(userData)).then((response)=>{
+          AsyncStorage.setItem('MOLO_USER',JSON.stringify(userData)).then((response)=>{
             navigation.navigate('Dashboard',{user:JSON.stringify(userData)});
             console.log("stringified data->:",JSON.stringify(userData));
+            console.log(response);
           }).catch((error)=>{
               console.error(error);
               setErrortext(error);
@@ -89,63 +94,68 @@ const LoginScreen = ({navigation}) => {
         <>
           <IconRegistry icons={EvaIconsPack} />
           <ApplicationProvider {...eva} theme={eva.light}>
+          <Loader loading={loading} />
+          <ImageBackground
+                style={ styles.imgBackground } 
+                resizeMode='cover' 
+                source={ICONS.splash}>
+                <ScrollView keyboardShouldPersistTaps="handled">
+                      <Layout style={{ flex:2, alignItems: 'center', justifyContent:'center',marginTop:0,backgroundColor:'transparent'}}>               
+                          <Logo />
+                          <Layout style={styles.inputBackground}>
+                                <Input
+                                  value ={email}
+                                  label ='Email'
+                                  size  ='large'
+                                  accessoryRight ={EmailIcon}
+                                  placeholder='christian@molo.com' 
+                                  onChangeText={nextValue => setEmail(nextValue)}
+                                  style ={{ width:'90%'}}
+                              />
+                          </Layout>
 
-          <ScrollView keyboardShouldPersistTaps="handled">
-                <Layout style={{ flex:2, alignItems: 'center', justifyContent:'center',marginTop:0}}>               
-                    <Logo />
-                    <Layout style={styles.inputBackground}>
-                          <Input
-                            value ={email}
-                            label ='Email'
-                            size  ='large'
-                            accessoryRight ={EmailIcon}
-                            placeholder='Your Email' 
-                            onChangeText={nextValue => setEmail(nextValue)}
-                            style ={{ width:'90%'}}
-                        />
+                          <Layout style ={styles.inputBackground}>
+                              <Input
+                                  value ={password}
+                                  label ='Password'
+                                  size  ='large' 
+                                  placeholder='**********' 
+                                  accessoryRight={renderIcon}
+                                  secureTextEntry={secureTextEntry}
+                                  onChangeText={nextValue => setPassword(nextValue)}
+                                  style ={{ width:'90%'}}
+                                />
+                          </Layout> 
+                          {errortext !== '' ? (
+                              <Text style={styles.errorTextStyle}>{errortext}</Text>
+                            ) : null}
+                          <Button style ={styles.btnBg,{ width:'87%',margin:20,backgroundColor:COLORS.primary, borderColor:COLORS.primary}}
+                                  onPress ={handleSubmitPress}
+                                  > Login </Button>   
+                          <Layout style ={{ flex:1,flexDirection:'row',justifyContent:'space-between',width:'87%'}}>
+                              <Text category='c1' onPress ={()=>navigation.navigate('Reset')}>Forgot password ?</Text> 
+                              <Text category='c1' onPress ={()=>navigation.navigate('SignUp')}>Create account</Text>
+                          </Layout>  
+
+                          
+                      <Layout style ={{ flex:0.5,flexDirection:'row',justifyContent:'space-around',width:'87%', marginTop:20}}>
+                              <Text category='c1' style ={styles.separator}></Text> 
+                              <Text category='c1' style={{justifyContent:"center",alignItems:"center", height:16}}>Or</Text> 
+                              <Text category='c1' style ={styles.separator1}></Text>
                     </Layout>
 
-                    <Layout style ={styles.inputBackground}>
-                        <Input
-                            value ={password}
-                            label ='Password'
-                            size  ='large' 
-                            placeholder='Your password' 
-                            accessoryRight={renderIcon}
-                            secureTextEntry={secureTextEntry}
-                            onChangeText={nextValue => setPassword(nextValue)}
-                            style ={{ width:'90%'}}
-                          />
-                    </Layout> 
-                    {errortext !== '' ? (
-                        <Text style={styles.errorTextStyle}>{errortext}</Text>
-                      ) : null}
-                    <Button style ={styles.btnBg,{ width:'87%',margin:20,backgroundColor:COLORS.primary, borderColor:COLORS.primary}}
-                            onPress ={()=>{navigation.navigate('Dashboard')}}
-                            > Login </Button>   
-                    <Layout style ={{ flex:1,flexDirection:'row',justifyContent:'space-between',width:'87%'}}>
-                        <Text category='c1' onPress ={()=>navigation.navigate('Reset')}>Forgot password ?</Text> 
-                        <Text category='c1' onPress ={()=>navigation.navigate('SignUp')}>Create account</Text>
-                    </Layout>  
+                      </Layout>
 
-                    
-                <Layout style ={{ flex:0.5,flexDirection:'row',justifyContent:'space-around',width:'87%', marginTop:20}}>
-                        <Text category='c1' style ={styles.separator}></Text> 
-                        <Text category='c1' style={{justifyContent:"center",alignItems:"center", height:16}}>Or</Text> 
-                        <Text category='c1' style ={styles.separator1}></Text>
-               </Layout>
-
-                </Layout>
-
-                <Layout style ={{ flex:0.4,flexDirection:'row', alignItems:'center', justifyContent:'space-between',width:'100%'}}>
-                    <Button style ={styles.btnBg,{ width:'40%',marginLeft:"5%",backgroundColor:COLORS.darkBlue, borderColor:COLORS.darkBlue}} 
-                            onPress ={()=>{alert("This feature is under way")}}
-                            accessoryLeft={messenger}> Kignschat </Button>   
-                    <Button style ={styles.btnBg,{ width:'40%',marginRight:"5%",backgroundColor:COLORS.red, borderColor:COLORS.red}} 
-                            onPress ={()=>{alert("This feature is under way")}}
-                            accessoryLeft={googlePlus}>+ Google </Button>                     
-                </Layout> 
-          </ScrollView>
+                      <Layout style ={{ flex:0.4,flexDirection:'row', alignItems:'center', justifyContent:'space-between',width:'100%'}}>
+                          <Button style ={styles.btnBg,{ width:'40%',marginLeft:"5%",backgroundColor:COLORS.darkBlue, borderColor:COLORS.darkBlue}} 
+                                  onPress ={()=>{alert("This feature is under way")}}
+                                  accessoryLeft={messenger}> Kingschat </Button>   
+                          <Button style ={styles.btnBg,{ width:'40%',marginRight:"5%",backgroundColor:COLORS.red, borderColor:COLORS.red}} 
+                                  onPress ={()=>{alert("This feature is under way")}}
+                                  accessoryLeft={googlePlus}>+ Google </Button>                     
+                      </Layout> 
+                </ScrollView> 
+                </ImageBackground>
 
 
           </ApplicationProvider>
@@ -199,4 +209,10 @@ const styles = StyleSheet.create({
       borderRadius:4,
       marginLeft:10,
     },
+    imgBackground: {
+     width: '100%',
+     height: '100%',
+     flex: 1 ,
+     marginBottom:30,
+ },
 })
