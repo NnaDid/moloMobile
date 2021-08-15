@@ -31,7 +31,8 @@ const SignUp = ( props ) => {
   
 const toggleSecureEntry = () => { setSecureTextEntry(!secureTextEntry);};
 
-const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name={secureTextEntry ? 'eye-off' : 'eye'}/>);
+const renderIcon  = (props) => (<Icon onPress={toggleSecureEntry} {...props} name={secureTextEntry ? 'eye-off' : 'eye'}/>);
+const renderIcon2 = (props) => (<Icon onPress={toggleSecureEntry} {...props} name={secureTextEntry ? 'eye-off' : 'eye'}/>);
 
 
   const [fName, setfName]               = useState('');
@@ -44,7 +45,7 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-  const handleSubmitButton = () => {
+  const handleSubmitButton = async () => {
     setErrortext('');
     if (!fName) {
       alert('Please fill Name');
@@ -79,10 +80,10 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
             paswd: userPassword,
       };
 
-    fetch(APIS.AUTH.SIGNUP, { method: 'POST', body: JSON.stringify(dataToSend),
+   await fetch(APIS.AUTH.SIGNUP, { method: 'POST', body: JSON.stringify(dataToSend),
       headers: {'Accept': 'application/json','Content-Type': 'application/json', },
     })
-    .then((response) => response.json())
+    .then((response) => await response.json())
       .then((responseJson) => {
         //Hide Loader
         setLoading(false);
