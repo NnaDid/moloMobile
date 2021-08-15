@@ -13,7 +13,7 @@ const MenuEllipsis = (props) => (
 const Home = ({navigation}) => {
     const  [userData, setUserData] = React.useState({});
     const  [userBal, setUserBal]   = React.useState({});
-    
+
    useEffect(() => {
     AsyncStorage.getItem('MOLO_USER').then((response)=>{
         if(response !== null || response!== undefined){
@@ -36,7 +36,7 @@ const Home = ({navigation}) => {
 
    const logout = ()=>{ 
         AsyncStorage.removeItem('MOLO_USER').then((val)=>{
-             navigation.navigate('Login'); 
+             navigation.navigate('login'); 
         });
     };
 
@@ -46,11 +46,16 @@ const logoutIcon = (props) => ( <Icon onPress ={logout} {...props} name='power-o
         <>
         <IconRegistry icons={EvaIconsPack} />
         <ApplicationProvider {...eva} theme={eva.light}>
-             <Layout style={{ flexDirection: 'row', justifyContent: 'space-between', width:'95%', position: 'relative', top: 4 }}>
-                 <Card style={{ backgroundColor: 'transparent',width:"85%", borderWidth:0}}> 
+             <Layout style={{ flexDirection: 'row', justifyContent: 'space-between', width:'95%', position: 'relative', top: 4,alignItems: 'center'}}>
+                 <Card style={{ backgroundColor: 'transparent',width:"90%", borderWidth:0}}> 
                          <Text style={{fontSize:18,fontWeight:"bold"}}>{userData.name}</Text>
                  </Card>
-                <Button style ={{boderRadius:40, width:30, height:30, borderWidth:0,justifyContent: 'center', alignItems: 'center',backgroundColor:COLORS.primary }} accessoryRight={logoutIcon}/>         
+                <Button style ={{
+                                boderRadius:40, width:30, height:30, borderWidth:0,justifyContent: 'center',
+                                 alignItems: 'center',backgroundColor:COLORS.primary
+                             }} accessoryRight={logoutIcon}
+                        onPress={()=>{navigation.navigate('Login')}}
+                />         
             </Layout>
 
                 <Layout style={{ flex:1,justifyContent:"center",alignItems:'center', backgroundColor:COLORS.primary}}>

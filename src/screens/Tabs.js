@@ -2,7 +2,12 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import  {  Home, UtilityBills,  BibleReadingPlan,  Partnership ,QuickDonate, Profile,Fundwallet} from './components/index';
+import  {  
+    Home, UtilityBills,  
+    BibleReadingPlan, 
+    Partnership ,QuickDonate,
+    Profile,Fundwallet
+} from './components/index';
 import Login from '../screens/Login' 
 import { ICONS, COLORS,} from '../constants';
 
@@ -16,8 +21,8 @@ const HoemSCreen =({navigation})=>(
             <HomeStack.Screen name ="Home" component={Home} options={{headerShown: false}}/>
             <HomeStack.Screen name ="Bible Reading Plan" component={BibleReadingPlan} options={{headerShown: false}}/>
             <HomeStack.Screen name ="Partnership" component={Partnership} options={{headerShown: false}}/>
-            <HomeStack.Screen name ="FundWallet" component={Fundwallet} options={{headerShown: false}}/>
-            <HomeStack.Screen name ="Login" component={Login} options={{headerShown: false}}/>
+            <HomeStack.Screen name ="FundWallet" component={Fundwallet} options={{headerShown: true}}/>
+            <HomeStack.Screen name ="login" component={Login} options={{headerShown: false}}/>
     </HomeStack.Navigator>
 );
 

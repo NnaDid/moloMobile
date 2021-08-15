@@ -30,10 +30,10 @@ const Fundwallet = ({navigation}) => {
      }); 
     }, [userData,navigation]) 
 
-  function FundWallet (action,amount,email,ref){
+ async function FundWallet (action,amount,email,ref){
       let dataToSend = {email:email, action: action, ref:ref,amount:amount};
 
-      fetch(APIS.WALLET.FUND, { method: 'POST',body: JSON.stringify(dataToSend),
+      await fetch(APIS.WALLET.FUND, { method: 'POST',body: JSON.stringify(dataToSend),
         headers: {'Accept': 'application/json', 'Content-Type': 'application/json',},
       })
       .then((response)=> response.json())

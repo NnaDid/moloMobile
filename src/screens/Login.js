@@ -71,7 +71,7 @@ const LoginScreen = ({navigation}) => {
                     user_id:responseJson.data.user_id
             };
           AsyncStorage.setItem('MOLO_USER',JSON.stringify(userData)).then((response)=>{
-            navigation.navigate('Dashboard',{user:JSON.stringify(userData)});
+            navigation.navigate('Dashboard',userData);
             console.log("stringified data->:",JSON.stringify(userData));
             console.log(response);
           }).catch((error)=>{

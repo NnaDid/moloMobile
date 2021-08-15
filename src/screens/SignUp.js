@@ -3,9 +3,8 @@ import { StyleSheet, ScrollView,KeyboardAvoidingView,ImageBackground,ToastAndroi
 import { ApplicationProvider, Button, Icon, IconRegistry, Layout, Text, Input ,Spinner} from '@ui-kitten/components'; 
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
-import { ICONS, COLORS, Logo} from '../constants';
+import { ICONS, COLORS, Logo,APIS} from '../constants';
 import Loader from './Loader';
-import { APIS } from '../constants';
 
 
 
@@ -45,8 +44,6 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-  //const setLoadingBtn = ()=>( loading ? <Spinner size='tiny'/> :'');
-
   const handleSubmitButton = () => {
     setErrortext('');
     if (!fName) {
@@ -82,15 +79,10 @@ const renderIcon = (props) => (<Icon onPress={toggleSecureEntry} {...props} name
             paswd: userPassword,
       };
 
-    fetch(APIS.AUTH.SIGNUP, {
-      method: 'POST',
-      body: JSON.stringify(dataToSend),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
+    fetch(APIS.AUTH.SIGNUP, { method: 'POST', body: JSON.stringify(dataToSend),
+      headers: {'Accept': 'application/json','Content-Type': 'application/json', },
     })
-      .then((response) => response.json())
+    .then((response) => response.json())
       .then((responseJson) => {
         //Hide Loader
         setLoading(false);
